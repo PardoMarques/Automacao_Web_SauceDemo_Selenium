@@ -1,4 +1,4 @@
-# *SauceDemo.com*
+# *www.saucedemo.com*
 
 Este projeto trata-se de uma automatização de testes de um e-commerce demo e simples.
 
