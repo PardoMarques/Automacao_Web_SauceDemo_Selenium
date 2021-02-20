@@ -9,28 +9,28 @@ class LoginPage < BasePage
 
     # mapeamento
 
-        def input_login, 
+        def input_login
             @driver.find_element(:css, '#user-name')
         end
         
-        def input_senha, 
+        def input_senha
             @driver.find_element(:css, '#password')
         end
         
-        def btn_logar, 
+        def btn_logar
             @driver.find_element(:css, '#login-button')
         end
         
-        def text_alerta, 
+        def text_alerta
             @driver.find_element(:css, 'h3[data-test="error"]')
         end
 
         
-        def info_login, 
+        def info_login
             @driver.find_element(:css, '#login_credentials')
         end
         
-        def info_senha, 
+        def info_senha
             @driver.find_element(:css, 'div.login_password')
         end
 

@@ -10,65 +10,58 @@ require "selenium-webdriver"
 
 describe "Testes da pagina SauceDemo" do
 
-    # Antes de tudo, executar
-    before(:all) do
+    # Antes de cada"each" teste, executar
+    before(:each) do
 
         options = Selenium::WebDriver::Chrome::Options.new
         options.add_argument('start-maximized')
-        #options.add_argument('headless')
+        options.add_argument('headless')
         driver = Selenium::WebDriver.for :chrome, options: options
-        wait = Selenium::WebDriver::Wait.new(:timout => 10)
+        @wait = Selenium::WebDriver::Wait.new(:timout => 10)
 
-        # @driver = Selenium::WebDriver.for :chrome, options: options
-        # @wait = Selenium::WebDriver::Wait.new(:timout => 10)
+        @base =         BasePage.new(driver)
+        @cart =         CartPage.new(driver)
+        @inventory =    InventoryPage.new(driver)
+        @item =         ItemPage.new(driver)
+        @login =        LoginPage.new(driver)
 
-        binding.pry
+        @base.irPara
 
-        @base = BasePage.new(driver)
-        @cart = CartPage.new(driver)
-        @inventory = InventoryPage.new(driver)
-        @item = ItemPage.new(driver)
-        @login = LoginPage.new(driver)
-        
-        
     end
 
-    # Antes de tudo, executar
-    # before(:each) do
-    #     @driver.navigate.to("https://www.saucedemo.com/")
-    # end
-
-    # # Depois de tudo, executar
-    # after(:all) do
-    #     @driver.quit
-    # end
+    # Depois de cada teste, executar
+    after(:each) do
+        @base.driver.quit
+    end
 
     describe "LoginPage" do
 
+        it "-> Login executado com sucesso" do
+            @login.fazerLogin('standard_user','secret_sauce')
+
+            expect(@login.driver.page_source).to include("Products")
+        end
+
         it "-> Login executado com erro" do
+            @login.fazerLogin('standard_user','senhaerrada')
 
-            binding.pry
-
-            @driver.find_element(:id, "user-name").send_keys("standard_user")
-            @driver.find_element(:id, "password").send_keys("senhaerrada")
-            @driver.find_element(:id,"login-button").click
-            expect(@driver.page_source).to include("Epic sadface: Username and password do not match any user in this service")
+            expect(@login.driver.page_source).to include("Epic sadface: Username and password do not match any user in this service")
         end
 
     end
 
-    it "-> Login executado com erro" do
-        @driver.find_element(:id, "user-name").send_keys("standard_user")
-        @driver.find_element(:id, "password").send_keys("senhaerrada")
-        @driver.find_element(:id,"login-button").click
-        expect(@driver.page_source).to include("Epic sadface: Username and password do not match any user in this service")
-    end
+    describe "InventoryPage" do
 
-    it "-> Login executado com sucesso" do
-        @driver.find_element(:id, "user-name").send_keys("standard_user")
-        @driver.find_element(:id, "password").send_keys("secret_sauce")
-        @driver.find_element(:id,"login-button").click
-        expect(@driver.page_source).to include("Products")
+        before(:each) do
+            @login.fazerLogin('standard_user','secret_sauce')
+        end
+
+        it "-> Selecionando um produto" do
+            @inventory.itemEOpcao('Sauce Labs Onesie', 'preco')
+
+            expect(@inventory.itemEOpcao('Sauce Labs Onesie', 'preco')).to include("$7.99")
+        end
+
     end
 
 end

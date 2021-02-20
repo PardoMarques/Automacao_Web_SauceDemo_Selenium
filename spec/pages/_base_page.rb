@@ -25,7 +25,7 @@ class BasePage
         def text_titulo
             @driver.find_element(:css, '#inventory_filter_container > div')
         end
-        
+
     # end
         
     # metodos
@@ -38,6 +38,10 @@ class BasePage
                 when 3 then content_menu.find_element(:xpath, "//*[contains(text(), 'Reset App State')]")
                 else puts "Nenhuma opção encontrada"
             end
+        end
+
+        def irPara
+            @driver.navigate.to("https://www.saucedemo.com/")
         end
 
     # end
